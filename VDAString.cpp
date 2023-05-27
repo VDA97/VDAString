@@ -4,20 +4,38 @@ namespace vda
 {
     VDAString::VDAString()
     {
-        printf("constructor");
-        s = " ";
+        printf("Constructor\n");
+        reset();
+    }
+    VDAString::VDAString(const char *s)
+    {
+        // copy_str(s);
+    }
+    VDAString::VDAString(const VDAString &old)
+    {
+        // copy_str(old);
     }
     VDAString::~VDAString()
     {
-        printf("Destructor");
+        printf("Destructor\n");
     }
-    void VDAString::setString(char const *str)
+    void VDAString::setString(const char *str)
     {
-        s = str;
+        _str = str;
     }
-    char const *VDAString::getString()
+    const char *VDAString::getString() const
     {
+        return _str;
+    }
 
-        return s;
+    void VDAString::reset()
+    {
+        //  _reset_split_array(); //
+        if (_str)
+        {
+            delete[] _str;
+            _str = nullptr;
+            _str_len = 0;
+        }
     }
 }
