@@ -1,0 +1,3 @@
+# Ignore all .o files in the root directory
+*.o
+*vdastring
