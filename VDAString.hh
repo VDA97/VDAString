@@ -6,12 +6,24 @@
 
 namespace vda
 {
+    constexpr size_t _vdastring_max_len = 65535;
+    constexpr size_t _vdastring_max_split = 1023;
 
     class VDAString
     {
         char const *_str = nullptr; // char const makes this pointer immutable.
         size_t _str_len = 0;
-        static constexpr size_t _vdastring_max_len = 1024;
+
+        // Regarding data management
+        typedef std::shared_ptr<VDAString> _vdasp;    //
+        typedef std::unique_ptr<_vdasp[]> _split_ptr; // We could use stl vector for this
+        // 1. Its important that this class actually manage the memory for the array
+        // 2. Unique ptr is the only smart pointer class that natively support arrays
+        mutable _split_ptr _split_array; // mutable here is to work with const parameters.
+        mutable size_t _split_count = 0;
+
+        void _reset_split_array() const;
+        void _append_split_array(const VDAString &s) const; // const here means no modifications on the member variables are possible.
 
     public:
         VDAString();

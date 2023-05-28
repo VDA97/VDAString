@@ -81,4 +81,36 @@ namespace vda
         }
         return _str;
     }
+
+    // MARK: - private methods
+    //  Data management
+    void VDAString::_reset_split_array() const
+    {
+        // Iterate the array and reset each element
+        if (_split_count)
+        {
+            while (_split_count)
+            {
+                _split_array[--_split_count].reset();
+            }
+            _split_array.reset();
+            _split_count = 0;
+        }
+    }
+    void VDAString::_append_split_array(const VDAString &s) const
+    {
+        // check if there is enough space
+        if (_split_count >= _vdastring_max_split)
+            return;
+        // check if _split_count is null, then allocates all of the shared_ptr for all the possible elements of the array
+        if (!_split_count)
+        {
+            _split_array.reset(new _vdasp[_vdastring_max_split + 1]);
+            // this makes memory management easier
+        }
+        // add a new object in the array using _split_count as index
+        _split_array[_split_count] = std::make_shared<VDAString>(s);
+        // update _split_count
+        ++_split_count;
+    }
 }
