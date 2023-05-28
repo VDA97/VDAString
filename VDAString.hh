@@ -41,6 +41,15 @@ namespace vda
         const char *c_str() const;          // getter
         const char *copy_str(const char *); // alloc and copy
 
+        // copy_and_swap assignment operator
+        VDAString &operator=(VDAString other);
+        // concatenation operator
+        VDAString &operator+=(const char *rhs);      // for c-string
+        VDAString &operator+=(const VDAString &rhs); // for VDAString object
+        // subscript operator
+        const char operator[](const int index) const;
+        // comparison operator
+
         // conversion operators
         operator const char *() const; // c-string type
     };

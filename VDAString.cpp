@@ -113,4 +113,59 @@ namespace vda
         // update _split_count
         ++_split_count;
     }
+
+    // MARK: -operators
+    // copy-and-swap assignment
+    VDAString &VDAString::operator=(VDAString other)
+    {
+        swap(other);
+        return *this;
+    }
+    // concatenation operator
+    VDAString &VDAString::operator+=(const char *rhs)
+    {
+        if (rhs)
+        {
+            // defines a newlen
+            size_t newlen = _str_len + strnlen(rhs, _vdastring_max_len);
+            // check if is the combine length ot higher than the max
+            if (newlen > _vdastring_max_len)
+            {
+                newlen = _vdastring_max_len; // resize to maxlen
+            }
+            // define the length of the new combined string
+            // in case, _str_len is higher, means nothing was added, instead it was corrupted.
+            size_t rhslen = newlen - _str_len;
+            if (rhslen < 1)
+                return *this;
+            // creates a buffer with the new space
+            char *buf = new char[newlen + 1]();
+            // copy the previous values in the new buffer
+            if (_str && _str_len)
+            {
+                memcpy(buf, _str, _str_len);
+            }
+            // copy the new values in the new buffer
+            memcpy(buf, rhs, rhslen); // why +_str_len ?
+            copy_str(buf);            // copies the buff to _str, I mean, here, this could cause some duplicate ?
+            // I mean, I do not remember if we were reseting something
+            delete[] buf;
+        }
+
+        return *this;
+    }
+    VDAString &VDAString::operator+=(const VDAString &rhs)
+    {
+        operator+=(rhs.c_str()); // calls the c-string versionn
+        return *this;
+    }
+    const char VDAString::operator[](const int index) const
+    {
+        if (index < 0)
+            return 0;
+        if (index >= (int)_str_len)
+            return 0;
+        else
+            return _str[index];
+    }
 }
