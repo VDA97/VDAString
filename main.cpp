@@ -6,8 +6,8 @@ int main(int argc, char **argv)
     //  nteste = std::make_shared<VDAString>();
     //  VDAString *nteste = new VDAString();
     auto nteste = std::make_unique<VDAString>();
-    nteste->setString("testes2");
-    printf("Hello World:%s\n", nteste->getString());
+    // nteste->setString("testes2");
+    printf("Hello World:\n");
     // delete nteste;
     //  printf("obj{%s}", obj1->getString());
     return 0;
