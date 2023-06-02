@@ -58,8 +58,14 @@ namespace vda
 
         // conversion operators
         operator const char *() const; // c-string type
-    };
 
+        // Utility methods
+        bool have_value() const;
+        // string format, allows the string to be used with printf
+        VDAString &format(const char *format, ...);
+        // trim leading and trailing process, removes leading and trailling spaces
+        VDAString &trim();
+    };
 }
 
 #endif // __VDASTRING__H__

@@ -246,4 +246,73 @@ namespace vda
         rs += rhs;
         return rs;
     }
+
+    // MARK: - Utility methods
+
+    bool VDAString::have_value() const
+    {
+        if (_str)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    // string format
+    VDAString &VDAString::format(const char *format, ...)
+    {
+        char *buffer;
+        va_list args;
+        //  va_start(args, format);//check it further
+
+        vasprintf(&buffer, format, args);
+        copy_str(buffer);
+        free(buffer);
+        return *this;
+    }
+
+    VDAString &VDAString::trim()
+    {
+        const static char *whitespace = "\x20\x1b\t\r\n\v\b\f\a";
+
+        if (!have_value())
+            return *this; // check and ensure we have an string
+
+        size_t begin = 0;
+        size_t end = length() - 1;
+
+        // check if we have whitespaces in the beginning and ending
+        for (begin = 0; begin <= end; ++begin)
+        {
+            if (strchr(whitespace, _str[begin]) == nullptr)
+            {
+                break;
+            }
+        }
+        for (; end > begin; end--)
+        {
+            if (strchr(whitespace, _str[end]) == nullptr)
+            {
+                break;
+            }
+            else
+            {
+                _str[end] = '\0';
+            }
+        }
+
+        // moves those characters over the beginning,
+        // make sure they are terminated at the end
+        if (begin)
+        {
+            for (size_t i = 0; _str[i]; ++i)
+            {
+                _str[i] = _str[begin++];
+            }
+        }
+
+        _str_len = strlen(_str);
+        return *this;
+    }
 }
