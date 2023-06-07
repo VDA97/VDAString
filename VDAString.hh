@@ -2,6 +2,7 @@
 #define __VDASTRING__H__
 #include <cstdio>
 #include <cstring> //for strlen().
+#include <cstdarg> //for using va_start, see VDAString format(...);
 #include <memory>
 
 namespace vda
@@ -11,7 +12,7 @@ namespace vda
 
     class VDAString
     {
-        char const *_str = nullptr; // char const makes this pointer immutable.
+        char *_str = nullptr; //
         size_t _str_len = 0;
 
         // Regarding data management
@@ -63,8 +64,22 @@ namespace vda
         bool have_value() const;
         // string format, allows the string to be used with printf
         VDAString &format(const char *format, ...);
+        // & foo() means function will return by reference.VDAString & format(const char *format, ...);
+        //  This can be used to e.g.create a pointer to a function.
         // trim leading and trailing process, removes leading and trailling spaces
         VDAString &trim();
+        // lower()
+        VDAString lower();
+        // upper(), takes the obj, iterate _str, uses toupper() and tolower
+        VDAString upper();
+        // back returns the last char of the string
+        const char &back();
+        // front
+        const char &front();
+        // length() = size(), both names are available in std library
+        const size_t length() { return _str_len; }
+        // size()
+        const size_t size() { return _str_len; }
     };
 }
 

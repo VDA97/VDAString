@@ -259,12 +259,12 @@ namespace vda
             return false;
     }
 
-    // string format
+    // string format, allows the string to be use with printf().
     VDAString &VDAString::format(const char *format, ...)
     {
         char *buffer;
         va_list args;
-        //  va_start(args, format);//check it further
+        va_start(args, format); // check it further
 
         vasprintf(&buffer, format, args);
         copy_str(buffer);
@@ -315,4 +315,32 @@ namespace vda
         _str_len = strlen(_str);
         return *this;
     }
+
+    VDAString VDAString::lower()
+    {
+        VDAString rs = *this;
+        for (size_t i = 0; i < rs._str[i]; ++i)
+        {
+            rs._str[i] = tolower(rs._str[i]);
+        }
+        return rs;
+    }
+    VDAString VDAString::upper()
+    {
+        VDAString rs = *this;
+        for (size_t i = 0; i < rs._str[i]; ++i)
+        {
+            rs._str[i] = toupper(rs._str[i]);
+        }
+        return rs;
+    }
+    const char &VDAString::back()
+    {
+        return _str[length() - 1];
+    }
+    const char &VDAString::front()
+    {
+        return _str[0];
+    }
+
 }
