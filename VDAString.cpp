@@ -343,4 +343,79 @@ namespace vda
         return _str[0];
     }
 
+    // MARK: - Find and Replace methods
+    // Find, iterate _str[i], verify a match and return the index of it, or return -1
+    long int VDAString::char_find(const char &match) const
+    {
+        for (int i = 0; _str[i]; ++i)
+        {
+            if (_str[i] == match)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+    // Replace, iterate _str[i], find if there is a match, then replace it.
+    const VDAString &VDAString::char_replace(const char &match, const char &rpl)
+    {
+        for (int i = 0; _str[i]; ++i)
+        {
+            if (_str[i] == match)
+            {
+                _str[i] = rpl;
+            }
+        }
+        return *this;
+    }
+
+    VDAString VDAString::substr(size_t start, size_t length)
+    {
+        // Create a new object
+        VDAString rs;
+        // creates a char buf
+        char *buf;
+        // These checks are aimed to validate the start and length
+        //  check if length +1 > max_ len or start + length > max_len, then return obj
+        if (length + 1 > _vdastring_max_len || (start + length) > _vdastring_max_len)
+            return rs;
+        // check if length > _str_len - start, return obj
+        if (length > (_str_len - start))
+            return rs;
+        // check if we dont have _str, return obj
+        if (!_str)
+            return rs;
+        // allocate buf memory, new char[length+1]();
+        buf = new char[length + 1]();
+        // copy _str + start into buf, memcpy(buf,_str + start,length);
+        memcpy(buf, _str + start, length);
+        rs = buf; // Here we are using the copy and swap operator.
+        delete[] buf;
+        return rs;
+    }
+
+    // Find, uses strstr to find the first match occurrence.
+    long VDAString::find(const VDAString &match) const
+    {
+        char *pos = strstr(_str, match.c_str());
+        if (pos)
+            return (long)(pos - _str);
+        else
+            return -1;
+    }
+
+    const VDAString VDAString::replace(VDAString &match, const VDAString &rpl)
+    {
+        VDAString rs;
+        long f1 = find(match);
+        if (f1 >= 0)
+        {
+            size_t pos1 = (size_t)f1;
+            size_t pos2 = pos1 + match.length();
+            VDAString s1 = pos1 > 0 ? substr(0, pos1) : "";
+            VDAString s2 = substr(pos2, length() - pos2);
+            rs = s1 + rpl + s2;
+        }
+        return rs;
+    }
 }

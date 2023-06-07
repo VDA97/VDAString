@@ -80,6 +80,13 @@ namespace vda
         const size_t length() { return _str_len; }
         // size()
         const size_t size() { return _str_len; }
+
+        // Mark: - Find and Replace operates on the raw C string for performance and efficiency
+        long int char_find(const char &match) const;
+        const VDAString &char_replace(const char &match, const char &rpl);
+        VDAString substr(size_t start, size_t length);
+        long find(const VDAString &match) const;
+        const VDAString replace(VDAString &match, const VDAString &rpl);
     };
 }
 
