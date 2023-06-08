@@ -418,4 +418,56 @@ namespace vda
         }
         return rs;
     }
+
+    // MARK: - Split Methods
+    // non destructive split
+    const VDAString::_split_ptr &VDAString::split(const char match) const
+    {
+        const char match_s[2] = {match, 0};
+        return split(match_s, -1);
+    }
+
+    const VDAString::_split_ptr &VDAString::split(const char *match) const
+    {
+        return split(match, -1);
+    }
+
+    const VDAString::_split_ptr &VDAString::split(const char *match, int max_split) const
+    {
+        _reset_split_array();
+        if (length() < 1) // se o tamanho da string for menor que 1, retorna o array de unique ptr
+            return _split_array;
+
+        if (max_split < 0)
+            max_split = _vdastring_max_split;
+
+        size_t match_len = strnlen(match, _vdastring_max_len);
+        if (match_len >= _vdastring_max_split)
+            return _split_array;
+
+        char *mi;          // match index
+        char *pstr = _str; // string pointer
+
+        // The function works is almost done here
+        // C library: strstr to find separators
+        while ((mi = strstr(pstr, match)) && --max_split)
+        {
+            if (mi != pstr)
+            {
+                size_t lhsz = mi - pstr;
+                char *cslhs = new char[lhsz + 1](); // temporary buffer
+                memcpy(cslhs, pstr, lhsz);
+                _append_split_array(cslhs); // append the results to the split_array
+                delete[] cslhs;             // frees up the temporary buffer
+                pstr += lhsz;
+            }
+            pstr += match_len;
+        }
+        if (*pstr != '\0')
+        {
+            _append_split_array(pstr);
+        }
+
+        return _split_array;
+    }
 }

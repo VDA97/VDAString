@@ -77,7 +77,7 @@ namespace vda
         // front
         const char &front();
         // length() = size(), both names are available in std library
-        const size_t length() { return _str_len; }
+        const size_t length() const { return _str_len; }
         // size()
         const size_t size() { return _str_len; }
 
@@ -87,6 +87,13 @@ namespace vda
         VDAString substr(size_t start, size_t length);
         long find(const VDAString &match) const;
         const VDAString replace(VDAString &match, const VDAString &rpl);
+
+        // split methods
+        const _split_ptr &split(const char match) const;  // calls the 3rd method
+        const _split_ptr &split(const char *match) const; // calls the 3rd method
+        const _split_ptr &split(const char *match, int max_split) const;
+        const VDAString &split_item(size_t index) const;
+        size_t split_count() const { return _split_count; };
     };
 }
 
